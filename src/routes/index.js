@@ -1,9 +1,9 @@
-import Home from '../components/Home';
-import User from '../components/User';
-import Asset from '../components/Asset';
-import Assignment from '../components/Assignment';
-import Request from '../components/Request';
-import Report from '../components/Report';
+import Home from '../pages/Home';
+import User from '../pages/User';
+import Asset from '../pages/Asset';
+import Assignment from '../pages/Assignment';
+import Request from '../pages/Request';
+import Report from '../pages/Report';
 
 // route public
 export const publicRoutes = [
