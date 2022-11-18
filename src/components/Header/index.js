@@ -11,10 +11,10 @@ function Header() {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <div className={cx('inner-page')}>Home {'>'} </div>
+                <div className={cx('inner-page')}>Home </div>
 
                 <div className={cx('inner-name')}>
-                    <div>Binhnv</div>
+                    <div>binhnv</div>
                     <div>
                         <Dropdown>
                             <Dropdown.Toggle variant="" style={{ color: 'white' }} />

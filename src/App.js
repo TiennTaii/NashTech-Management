@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { publicRoutes } from './routes/index';
 import DefaultLayout from './layouts/DefaultLayout';
-import './assets/styles/globalStyles/page.module.scss';
 
 function App() {
     return (
@@ -25,6 +24,7 @@ function App() {
                     })}
                 </Routes>
             </div>
+            <Outlet />
         </Router>
     );
 }
