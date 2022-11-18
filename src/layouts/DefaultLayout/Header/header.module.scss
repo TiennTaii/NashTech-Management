@@ -8,5 +8,15 @@
 
 .inner {
     height: 100%;
-    width: 1860px;
+    width: 1680px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 22px;
+    color: #eff1f5;
+}
+
+.inner-name {
+    display: flex;
 }
