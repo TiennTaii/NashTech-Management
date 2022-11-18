@@ -1,5 +1,7 @@
 import styles from './sideBar.module.scss';
 import classNames from 'classnames/bind';
+import config from '../../config';
+import Menu, { MenuItem } from './Menu';
 
 const cx = classNames.bind(styles);
 
@@ -14,14 +16,14 @@ function Sidebar() {
                 <div>Online Asset Management</div>
             </div>
 
-            <div className={cx('content')}>
-                <div className={cx('home')}>Home</div>
-                <div className={cx('user')}>Manage User</div>
-                <div className={cx('asset')}>Manage Asset</div>
-                <div className={cx('assignment')}>Manage Assignment</div>
-                <div className={cx('request')}>Request For Returning</div>
-                <div className={cx('return')}>Return</div>
-            </div>
+            <Menu>
+                <MenuItem title="Home" to={config.routes.home} />
+                <MenuItem title="Manage User" to={config.routes.user} />
+                <MenuItem title="Manage Asset" to={config.routes.asset} />
+                <MenuItem title="Manage Assignment" to={config.routes.assignment} />
+                <MenuItem title="Request for Returning" to={config.routes.requestForReturning} />
+                <MenuItem title="Report" to={config.routes.report} />
+            </Menu>
         </aside>
     );
 }

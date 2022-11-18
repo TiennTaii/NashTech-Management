@@ -4,16 +4,16 @@ import Asset from '../pages/Asset';
 import Assignment from '../pages/Assignment';
 import Request from '../pages/Request';
 import Report from '../pages/Report';
+import config from '../config';
 
 // route public
 export const publicRoutes = [
-    { path: '', component: Home },
-    { path: 'user', component: User },
-    { path: 'asset', component: Asset },
-    { path: 'assignment', component: Assignment },
-    { path: 'requestforreturning', component: Request },
-    { path: 'report', component: Report },
+    { path: config.routes.home, component: Home },
+    { path: config.routes.user, component: User },
+    { path: config.routes.asset, component: Asset },
+    { path: config.routes.assignment, component: Assignment },
+    { path: config.routes.requestForReturning, component: Request },
+    { path: config.routes.report, component: Report },
 ];
 
-// route displayed only when logged in
 export const privateRoutes = [];

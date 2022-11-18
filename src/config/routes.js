@@ -1,10 +1,10 @@
 const routes = {
-    home: "/",
-    managerUser: "/manageruser",
-    manageAsset: "/manageasset",
-    manageAssignment: "/manageassignment",
-    requestForReturning: "/requestforreturning",
-    Report: "/report",
+    home: '/',
+    user: 'manageruser',
+    asset: 'manageasset',
+    assignment: 'manageassignment',
+    requestForReturning: 'requestforreturning',
+    report: 'report',
 };
 
 export default routes;
