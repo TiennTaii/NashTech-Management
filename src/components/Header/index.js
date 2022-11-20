@@ -1,18 +1,35 @@
 import classNames from 'classnames/bind';
 import styles from './header.module.scss';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import routes from '../../config/routes';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const location = useLocation();
+    const [name, setName] = useState();
+
+    useEffect(() => {
+        const result = Object.entries(routes).filter(([key, value]) => {
+            if (location.pathname === value.path) {
+                return value.name;
+            }
+
+            return null;
+        });
+
+        setName(result[0][1].name);
+    }, [location]);
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <div className={cx('inner-page')}>Home</div>
+                <div className={cx('inner-page')}>{name}</div>
 
                 <div className={cx('inner-name')}>
                     <div>binhnv</div>

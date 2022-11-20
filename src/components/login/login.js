@@ -42,7 +42,7 @@ const Login = () => {
                                 setUserName(e.target.value);
                             }}
                             onBlur={(e) => {
-                                e.target.value === '' ? setIsUserNameError('not be empty!!') : setIsUserNameError('');
+                                e.target.value === '' ? setIsUserNameError('not be empty!') : setIsUserNameError('');
                             }}
                             onFocus={() => {
                                 setIsUserNameError('');
@@ -64,7 +64,7 @@ const Login = () => {
                                 setPassword(e.target.value);
                             }}
                             onBlur={(e) => {
-                                e.target.value === '' ? setIsPasswordError('not be empty!!') : setIsPasswordError('');
+                                e.target.value === '' ? setIsPasswordError('not be empty!') : setIsPasswordError('');
                             }}
                             onFocus={() => {
                                 setIsPasswordError('');
