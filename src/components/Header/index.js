@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './header.module.scss';
-import { Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,11 +24,10 @@ function Header() {
                                 <Dropdown.Item>Action</Dropdown.Item>
                                 <Dropdown.Item>Change password</Dropdown.Item>
                                 <NavDropdown.Divider />
-                                <Link to="/" style={{ textDecoration: 'none' }}>
-                                    <Dropdown.Item href="/">Logout</Dropdown.Item>
-                                </Link>
+                                <Dropdown.Item href="/">Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+                        <Outlet />
                     </div>
                 </div>
             </div>

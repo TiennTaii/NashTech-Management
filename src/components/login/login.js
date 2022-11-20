@@ -1,17 +1,27 @@
 import './login.scss';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
+import { useAuthContext } from '../../context/authContext';
 
-const Home = () => {
+const Login = () => {
     const [isUserNameError, setIsUserNameError] = useState('');
     const [isPasswordError, setIsPasswordError] = useState('');
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const { setIsAuthenticated } = useAuthContext();
 
     const handleLogin = () => {
+        //call api login
         userName === '' ? setIsUserNameError('not be empty!') : setIsUserNameError('');
         password === '' ? setIsPasswordError('not be empty!') : setIsPasswordError('');
+        if (userName === 'admin' && password === '123456') {
+            setIsAuthenticated(true);
+            navigate('/');
+        }
     };
 
     return (
@@ -34,7 +44,7 @@ const Home = () => {
                             onBlur={(e) => {
                                 e.target.value === '' ? setIsUserNameError('not be empty!!') : setIsUserNameError('');
                             }}
-                            onFocus={(e) => {
+                            onFocus={() => {
                                 setIsUserNameError('');
                             }}
                         />
@@ -43,7 +53,7 @@ const Home = () => {
                     <div className="form_item">
                         <label>Password: </label>
                         <input
-                            type="text"
+                            type="password"
                             id="input-bar"
                             className={`${isPasswordError ? 'input-error' : ''}`}
                             placeholder="Enter password"
@@ -56,7 +66,7 @@ const Home = () => {
                             onBlur={(e) => {
                                 e.target.value === '' ? setIsPasswordError('not be empty!!') : setIsPasswordError('');
                             }}
-                            onFocus={(e) => {
+                            onFocus={() => {
                                 setIsPasswordError('');
                             }}
                         />
@@ -67,7 +77,7 @@ const Home = () => {
                         Login
                     </Button>
 
-                    <a className="sign-up" href="home">
+                    <a className="sign-up" href="/">
                         Sign Up
                     </a>
                 </form>
@@ -76,4 +86,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Login;

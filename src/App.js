@@ -1,36 +1,44 @@
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { publicRoutes } from './routes/index';
 import DefaultLayout from './layouts/DefaultLayout';
+import { Fragment } from 'react';
+import AuthProvider from './context/authContext';
+import RequiredAuth from './context/requiredAuth';
 import Login from './components/login/login';
 
 function App() {
     return (
-        <Router>
-            <div>
+        <AuthProvider>
+            <Router>
                 <Routes>
-                    <Route path="" element={<Login />} />
-                </Routes>
+                    <Route path="/login" element={<Login />} />
 
-                <Routes>
                     {publicRoutes.map((route, index) => {
-                        const Layout = route.layout || DefaultLayout;
                         const Page = route.component;
+                        let Layout = DefaultLayout;
+
+                        if (route.layout === null) {
+                            Layout = Fragment;
+                        }
+
                         return (
                             <Route
                                 key={index}
                                 path={route.path}
                                 element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
+                                    <RequiredAuth>
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    </RequiredAuth>
                                 }
                             />
                         );
                     })}
                 </Routes>
-            </div>
-            <Outlet />
-        </Router>
+                <Outlet />
+            </Router>
+        </AuthProvider>
     );
 }
 
