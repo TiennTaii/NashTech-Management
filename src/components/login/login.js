@@ -16,12 +16,14 @@ const Login = () => {
 
     const handleLogin = () => {
         //call api login
-        userName === '' ? setIsUserNameError('not be empty!') : setIsUserNameError('');
-        password === '' ? setIsPasswordError('not be empty!') : setIsPasswordError('');
+        userName === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
+        password === '' ? setIsPasswordError('Password is required') : setIsPasswordError('');
         if (userName === 'admin' && password === '123456') {
             setIsAuthenticated(true);
             navigate('/');
         }
+
+        // if user enter wrong name or password will show warning
     };
 
     return (
@@ -38,11 +40,11 @@ const Login = () => {
                             placeholder="Enter username"
                             value={userName}
                             onChange={(e) => {
-                                e.target.value === '' ? setIsUserNameError('not be empty!') : setIsUserNameError('');
+                                e.target.value === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
                                 setUserName(e.target.value);
                             }}
                             onBlur={(e) => {
-                                e.target.value === '' ? setIsUserNameError('not be empty!') : setIsUserNameError('');
+                                e.target.value === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
                             }}
                             onFocus={() => {
                                 setIsUserNameError('');
@@ -59,12 +61,12 @@ const Login = () => {
                             placeholder="Enter password"
                             value={password}
                             onChange={(e) => {
-                                e.target.value === '' ? setIsPasswordError('not be empty!') : setIsPasswordError('');
+                                e.target.value === '' ? setIsPasswordError('Password is required') : setIsPasswordError('');
 
                                 setPassword(e.target.value);
                             }}
                             onBlur={(e) => {
-                                e.target.value === '' ? setIsPasswordError('not be empty!') : setIsPasswordError('');
+                                e.target.value === '' ? setIsPasswordError('Password is required') : setIsPasswordError('');
                             }}
                             onFocus={() => {
                                 setIsPasswordError('');
@@ -76,10 +78,6 @@ const Login = () => {
                     <Button variant="danger" onClick={handleLogin}>
                         Login
                     </Button>
-
-                    <a className="sign-up" href="/">
-                        Sign Up
-                    </a>
                 </form>
             </div>
         </section>
