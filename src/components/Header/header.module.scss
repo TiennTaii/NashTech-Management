@@ -24,3 +24,16 @@
 .modal-title {
     color: #cf2338;
 }
+
+.input-new-password {
+    display: flex;
+}
+
+.icon-new {
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    margin-left: -2rem;
+    background-color: transparent;
+    cursor: pointer;
+}

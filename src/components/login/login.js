@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
-import { useAuthContext } from '../../context/authContext';
+import { useAuthContext } from '../../context/RequiredAuth/authContext';
 
 const Login = () => {
     const [isUserNameError, setIsUserNameError] = useState('');
@@ -12,18 +12,32 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const { setIsAuthenticated } = useAuthContext();
+    const { setIsAuthenticated, setUser } = useAuthContext();
 
     const handleLogin = () => {
-        //call api login
+        let isAdmin = false;
+
         userName === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
         password === '' ? setIsPasswordError('Password is required') : setIsPasswordError('');
-        if (userName === 'admin' && password === '123456') {
+
+        if (userName === 'adminHN' && password === 'Admin@123') {
+            isAdmin = true;
+            localStorage.setItem('accessToken', true);
             setIsAuthenticated(true);
             navigate('/');
         }
 
-        // if user enter wrong name or password will show warning
+        if (userName === 'user' && password === 'user@123') {
+            isAdmin = false;
+            localStorage.setItem('accessToken', true);
+            setIsAuthenticated(true);
+            navigate('/');
+        }
+
+        setUser({
+            name: userName,
+            isAdmin,
+        });
     };
 
     return (
