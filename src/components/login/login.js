@@ -12,32 +12,35 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const { setIsAuthenticated, setUser } = useAuthContext();
+    const { setIsAuthenticated, setToken } = useAuthContext();
 
-    const handleLogin = () => {
-        let isAdmin = false;
-
+    const handleLogin = async () => {
         userName === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
         password === '' ? setIsPasswordError('Password is required') : setIsPasswordError('');
 
-        if (userName === 'adminHN' && password === 'Admin@123') {
-            isAdmin = true;
-            localStorage.setItem('accessToken', true);
-            setIsAuthenticated(true);
-            navigate('/');
-        }
+        const result = await fetch(`https://localhost:7060/api/Account`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
 
-        if (userName === 'user' && password === 'user@123') {
-            isAdmin = false;
-            localStorage.setItem('accessToken', true);
-            setIsAuthenticated(true);
-            navigate('/');
-        }
-
-        setUser({
-            name: userName,
-            isAdmin,
+            body: JSON.stringify({
+                username: userName,
+                password: password,
+            }),
         });
+
+        const data = await result.json();
+        localStorage.setItem('accessToken', data.token);
+
+        if (data.token) {
+            setIsAuthenticated(true);
+            navigate('/');
+        }
+
+        setToken(data);
     };
 
     return (
