@@ -13,8 +13,9 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [hideNew, setHideNew] = useState(false);
-    const { token } = useAuthContext();
+    const { token, oldPassword } = useAuthContext();
     const [showFirstChangePassword, setShowFirstChangePassWord] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
 
     const toggleBtnNew = () => {
         setHideNew((pre) => !pre);
@@ -27,6 +28,24 @@ function Home() {
             setShowFirstChangePassWord(false);
         }
     }, [token]);
+
+    const handleSave = async () => {
+        await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Account`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token.token}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+
+            body: JSON.stringify({
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+            }),
+        });
+        setShowFirstChangePassWord(false);
+    };
 
     return (
         <div>
@@ -50,7 +69,14 @@ function Home() {
                     <Form>
                         <h6>New password:</h6>
                         <div className={cx('input-new-password')}>
-                            <Form.Control type={hideNew ? 'text' : 'password'} placeholder="Enter new password" />
+                            <Form.Control
+                                type={hideNew ? 'text' : 'password'}
+                                placeholder="Enter new password"
+                                value={newPassword}
+                                onChange={(e) => {
+                                    setNewPassword(e.target.value);
+                                }}
+                            />
                             <div className={cx('icon-new')} onClick={toggleBtnNew}>
                                 {hideNew ? <AiFillEyeInvisible /> : <AiFillEye />}
                             </div>
@@ -58,7 +84,9 @@ function Home() {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger">Save</Button>
+                    <Button variant="danger" onClick={handleSave}>
+                        Save
+                    </Button>
                 </Modal.Footer>
             </Modal>
             <h1>Home </h1>

@@ -12,7 +12,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const { setIsAuthenticated, setToken } = useAuthContext();
+    const { setIsAuthenticated, setToken, setOldPassword } = useAuthContext();
 
     const handleLogin = async () => {
         userName === '' ? setIsUserNameError('User name is required') : setIsUserNameError('');
@@ -41,6 +41,7 @@ const Login = () => {
         }
 
         setToken(data);
+        setOldPassword(password);
     };
 
     return (
