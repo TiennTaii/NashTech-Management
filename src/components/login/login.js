@@ -36,7 +36,6 @@ const Login = () => {
         });
 
         const data = await result.json();
-        localStorage.setItem('accessToken', data.token);
 
         if (data.token) {
             setIsAuthenticated(true);
@@ -52,8 +51,14 @@ const Login = () => {
             setIsLoginError(false);
         }
 
+        if (!userName || !password) {
+            setIsLoginError(false);
+        }
+
         setToken(data);
+        sessionStorage.setItem('localStorage', data.token);
         setOldPasswordLogin(password);
+        sessionStorage.setItem('userInformation', JSON.stringify(data));
     };
 
     return (
@@ -112,7 +117,12 @@ const Login = () => {
                         Login
                     </Button>
 
-                    {isLoginError && <div className="login_false">Invalid login information!</div>}
+                    {isLoginError && (
+                        <div className="login_false">
+                            <div>Username or password is incorrect.</div>
+                            <div>Please try again!</div>
+                        </div>
+                    )}
                     {isNoResponseError && <div className="login_false">Sorry the request failed!</div>}
                 </form>
             </div>

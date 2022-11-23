@@ -40,11 +40,11 @@ function Header() {
     const handleCloseChangePassword = () => setShowChangePassword(false);
     const handleShowChangePassWord = () => setShowChangePassword(true);
 
-    const { token, oldPasswordLogin } = useAuthContext();
+    const { token, oldPasswordLogin, setToken } = useAuthContext();
 
     const handleCloseRemoveAccessToken = () => {
         setShow(false);
-        localStorage.removeItem('accessToken');
+        sessionStorage.removeItem('localStorage');
     };
 
     const toggleBtnOld = () => {
@@ -54,6 +54,20 @@ function Header() {
     const toggleBtnNew = () => {
         setHideNew((pre) => !pre);
     };
+
+    useEffect(() => {
+        const user = sessionStorage.getItem('userInformation');
+        if (user) {
+            try {
+                setToken(JSON.parse(user));
+            } catch (error) {}
+        }
+    }, []);
+
+    setTimeout(() => {
+        sessionStorage.removeItem('localStorage');
+        window.location.reload();
+    }, 6000000);
 
     useEffect(() => {
         const result = Object.entries(routes).filter(([key, value]) => {
@@ -152,6 +166,11 @@ function Header() {
                                 onChange={(e) => {
                                     setOldPassword(e.target.value);
                                 }}
+                                onFocus={() => {
+                                    setIsOldPasswordError(false);
+                                    setIsEmptyPasswordError(false);
+                                    setIsSamePasswordError(false);
+                                }}
                             />
                             <div className={cx('icon-new')} onClick={toggleBtnOld}>
                                 {hideOld ? <AiFillEyeInvisible /> : <AiFillEye />}
@@ -169,6 +188,10 @@ function Header() {
                                 value={newPassword}
                                 onChange={(e) => {
                                     setNewPassword(e.target.value);
+                                }}
+                                onFocus={() => {
+                                    setIsEmptyPasswordError(false);
+                                    setIsSamePasswordError(false);
                                 }}
                             />
                             <div className={cx('icon-new')} onClick={toggleBtnNew}>
@@ -204,7 +227,7 @@ function Header() {
                 <Modal.Header closeButton>
                     <h3 className={cx('modal-title')}>Change password</h3>
                 </Modal.Header>
-                <Modal.Body>Your password has been changed successfilly!</Modal.Body>
+                <Modal.Body>Your password has been changed successfUlly!</Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-primary" onClick={handleCloseSuccess}>
                         Close
