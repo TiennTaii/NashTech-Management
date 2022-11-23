@@ -21,6 +21,7 @@ function Header() {
     const [name, setName] = useState();
     const [hideOld, setHideOld] = useState(false);
     const [hideNew, setHideNew] = useState(false);
+    const [disable, setDisable] = useState(true);
 
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
@@ -54,6 +55,16 @@ function Header() {
     const toggleBtnNew = () => {
         setHideNew((pre) => !pre);
     };
+
+    useEffect(() => {
+        if (!Boolean(oldPassword) || !Boolean(newPassword)) {
+            setDisable(true);
+        } else {
+            setDisable(false);
+        }
+
+        return;
+    }, [oldPassword, newPassword]);
 
     useEffect(() => {
         const user = sessionStorage.getItem('userInformation');
@@ -214,7 +225,7 @@ function Header() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleSave}>
+                    <Button variant="danger" onClick={handleSave} disabled={disable}>
                         Save
                     </Button>
                     <Button variant="outline-primary" onClick={handleCloseChangePassword} href="">
@@ -227,7 +238,7 @@ function Header() {
                 <Modal.Header closeButton>
                     <h3 className={cx('modal-title')}>Change password</h3>
                 </Modal.Header>
-                <Modal.Body>Your password has been changed successfUlly!</Modal.Body>
+                <Modal.Body>Your password has been changed successfully!</Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-primary" onClick={handleCloseSuccess}>
                         Close
