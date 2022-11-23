@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import './home.scss';
 
 import classNames from 'classnames/bind';
 import styles from '../../components/Header/header.module.scss';
@@ -16,6 +17,12 @@ function Home() {
     const { token, oldPasswordLogin } = useAuthContext();
     const [showFirstChangePassword, setShowFirstChangePassWord] = useState(false);
     const [newPassword, setNewPassword] = useState('');
+
+    const [isEmptyPasswordError, setIsEmptyPasswordError] = useState(false);
+    const [isSamePasswordError, setIsSamePasswordError] = useState(false);
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
 
     const toggleBtnNew = () => {
         setHideNew((pre) => !pre);
@@ -47,7 +54,11 @@ function Home() {
 
         if (result.status === 200) {
             setShowFirstChangePassWord(false);
+            setShow(true);
         }
+
+        !newPassword ? setIsEmptyPasswordError(true) : setIsEmptyPasswordError(false);
+        newPassword === oldPasswordLogin ? setIsSamePasswordError(true) : setIsSamePasswordError(false);
     };
 
     return (
@@ -85,10 +96,32 @@ function Home() {
                             </div>
                         </div>
                     </Form>
+
+                    {isEmptyPasswordError && (
+                        <div className={cx('oldPassword_false')}>You should provide the new password!</div>
+                    )}
+
+                    {isSamePasswordError && (
+                        <div className={cx('oldPassword_false')}>
+                            The new password should not be the same with the old password!
+                        </div>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleSave}>
                         Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <h3 className={cx('modal-title')}>Change password</h3>
+                </Modal.Header>
+                <Modal.Body>Your password has been changed successfilly!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-primary" onClick={handleClose}>
+                        Close
                     </Button>
                 </Modal.Footer>
             </Modal>

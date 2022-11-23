@@ -33,6 +33,9 @@ function Header() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [showSuccess, setShowSuccess] = useState(false);
+    const handleCloseSuccess = () => setShowSuccess(false);
+
     const [showChangePassword, setShowChangePassword] = useState(false);
     const handleCloseChangePassword = () => setShowChangePassword(false);
     const handleShowChangePassWord = () => setShowChangePassword(true);
@@ -87,6 +90,13 @@ function Header() {
         oldPassword === oldPasswordLogin && newPassword !== oldPassword && newPassword && result.status === 400
             ? setIsComplexityPasswordError(true)
             : setIsComplexityPasswordError(false);
+
+        if (result.status === 200) {
+            setShowChangePassword(false);
+            setShowSuccess(true);
+        } else {
+            setShowSuccess(false);
+        }
     };
 
     return (
@@ -186,6 +196,18 @@ function Header() {
                     </Button>
                     <Button variant="outline-primary" onClick={handleCloseChangePassword} href="">
                         Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showSuccess} onHide={handleCloseSuccess}>
+                <Modal.Header closeButton>
+                    <h3 className={cx('modal-title')}>Change password</h3>
+                </Modal.Header>
+                <Modal.Body>Your password has been changed successfilly!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-primary" onClick={handleCloseSuccess}>
+                        Close
                     </Button>
                 </Modal.Footer>
             </Modal>
