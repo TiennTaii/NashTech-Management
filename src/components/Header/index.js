@@ -24,8 +24,10 @@ function Header() {
 
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
-    const [isNewPasswordError, setIsNewPasswordError] = useState('');
-    const [isOldPasswordError, setIsOldPasswordError] = useState('');
+    const [isOldPasswordError, setIsOldPasswordError] = useState(false);
+    const [isEmptyPasswordError, setIsEmptyPasswordError] = useState(false);
+    const [isSamePasswordError, setIsSamePasswordError] = useState(false);
+    const [isComplexityPasswordError, setIsComplexityPasswordError] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -35,7 +37,7 @@ function Header() {
     const handleCloseChangePassword = () => setShowChangePassword(false);
     const handleShowChangePassWord = () => setShowChangePassword(true);
 
-    const { token } = useAuthContext();
+    const { token, oldPasswordLogin } = useAuthContext();
 
     const handleCloseRemoveAccessToken = () => {
         setShow(false);
@@ -63,7 +65,7 @@ function Header() {
     }, [location]);
 
     const handleSave = async () => {
-        await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Account`, {
+        const result = await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Account`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -77,7 +79,14 @@ function Header() {
                 newPassword: newPassword,
             }),
         });
-        handleCloseChangePassword(false);
+
+        oldPassword !== oldPasswordLogin ? setIsOldPasswordError(true) : setIsOldPasswordError(false);
+        !newPassword ? setIsEmptyPasswordError(true) : setIsEmptyPasswordError(false);
+        newPassword === oldPassword ? setIsSamePasswordError(true) : setIsSamePasswordError(false);
+
+        oldPassword === oldPasswordLogin && newPassword !== oldPassword && newPassword && result.status === 400
+            ? setIsComplexityPasswordError(true)
+            : setIsComplexityPasswordError(false);
     };
 
     return (
@@ -139,6 +148,7 @@ function Header() {
                             </div>
                         </div>
                     </Form>
+                    {isOldPasswordError && <div className={cx('oldPassword_false')}>Password is incorrect!</div>}
                     <br></br>
                     <Form>
                         <h6>New password:</h6>
@@ -156,6 +166,19 @@ function Header() {
                             </div>
                         </div>
                     </Form>
+                    {isEmptyPasswordError && (
+                        <div className={cx('oldPassword_false')}>You should provide the new password!</div>
+                    )}
+
+                    {isSamePasswordError && (
+                        <div className={cx('oldPassword_false')}>
+                            The new password should not be the same with the old password!
+                        </div>
+                    )}
+
+                    {isComplexityPasswordError && (
+                        <div className={cx('oldPassword_false')}>The password should match the complexity!</div>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleSave}>

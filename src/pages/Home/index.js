@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [hideNew, setHideNew] = useState(false);
-    const { token, oldPassword } = useAuthContext();
+    const { token, oldPasswordLogin } = useAuthContext();
     const [showFirstChangePassword, setShowFirstChangePassWord] = useState(false);
     const [newPassword, setNewPassword] = useState('');
 
@@ -30,7 +30,7 @@ function Home() {
     }, [token]);
 
     const handleSave = async () => {
-        await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Account`, {
+        const result = await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Account`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -40,11 +40,14 @@ function Home() {
             },
 
             body: JSON.stringify({
-                oldPassword: oldPassword,
+                oldPassword: oldPasswordLogin,
                 newPassword: newPassword,
             }),
         });
-        setShowFirstChangePassWord(false);
+
+        if (result.status === 200) {
+            setShowFirstChangePassWord(false);
+        }
     };
 
     return (
