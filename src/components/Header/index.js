@@ -148,11 +148,11 @@ function Header() {
             </div>
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <h3 className={cx('modal-title')}>Are you sure</h3>
                 </Modal.Header>
                 <Modal.Body>Do you want to log out?</Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer style={{ justifyContent: 'flex-start' }}>
                     <Button variant="danger" onClick={handleCloseRemoveAccessToken} href="/">
                         Log out
                     </Button>
@@ -163,7 +163,7 @@ function Header() {
             </Modal>
 
             <Modal show={showChangePassword} onHide={handleCloseChangePassword}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <h3 className={cx('modal-title')}>Change Password</h3>
                 </Modal.Header>
                 <Modal.Body>
@@ -184,7 +184,7 @@ function Header() {
                                 }}
                             />
                             <div className={cx('icon-new')} onClick={toggleBtnOld}>
-                                {hideOld ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                {hideOld ? <AiFillEye /> : <AiFillEyeInvisible />}
                             </div>
                         </div>
                     </Form>
@@ -206,7 +206,7 @@ function Header() {
                                 }}
                             />
                             <div className={cx('icon-new')} onClick={toggleBtnNew}>
-                                {hideNew ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                {hideNew ? <AiFillEye /> : <AiFillEyeInvisible />}
                             </div>
                         </div>
                     </Form>

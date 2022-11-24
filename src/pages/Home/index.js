@@ -113,7 +113,7 @@ function Home() {
                                 }}
                             />
                             <div className={cx('icon-new')} onClick={toggleBtnNew}>
-                                {hideNew ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                {hideNew ? <AiFillEye /> : <AiFillEyeInvisible />}
                             </div>
                         </div>
                     </Form>

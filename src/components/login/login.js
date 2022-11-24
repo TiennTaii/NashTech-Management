@@ -79,7 +79,7 @@ const Login = () => {
                     <img src={logo} alt="" className="logo"></img>
 
                     <div className="form_item">
-                        <label>User name:</label>
+                        <label>Username:</label>
                         <input
                             className={`${isUserNameError ? 'input-error' : ''}`}
                             type="text"
