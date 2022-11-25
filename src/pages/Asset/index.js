@@ -259,7 +259,7 @@ function Asset() {
                                     <div className={cx('title')}>
                                         <div>Asset Code</div>
                                         <button className={cx('triagle')} onClick={handleIsAssetCode}>
-                                            {isAssetCode ? <GoTriangleDown /> : <GoTriangleUp />}
+                                            {isAssetCode ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -269,7 +269,7 @@ function Asset() {
                                     <div className={cx('title')}>
                                         <div>Asset Name</div>
                                         <button className={cx('triagle')} onClick={handleIsAssetName}>
-                                            {isAssetName ? <GoTriangleDown /> : <GoTriangleUp />}
+                                            {isAssetName ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -279,7 +279,7 @@ function Asset() {
                                     <div className={cx('title')}>
                                         <div> Category</div>
                                         <button className={cx('triagle')} onClick={handleIsCategory}>
-                                            {isCategory ? <GoTriangleDown /> : <GoTriangleUp />}
+                                            {isCategory ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -289,7 +289,7 @@ function Asset() {
                                     <div className={cx('title')}>
                                         <div> State</div>
                                         <button className={cx('triagle')} onClick={handleIsState}>
-                                            {isState ? <GoTriangleDown /> : <GoTriangleUp />}
+                                            {isState ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
