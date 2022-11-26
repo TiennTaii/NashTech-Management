@@ -23,19 +23,31 @@ function Assignment() {
     const [showCategory, setShowCategory] = useState(false);
     const [placeholderState, setPlaceholderState] = useState('State');
 
+    const [isNo, setIsNo] = useState(false);
     const [isAssetCode, setIsAssetCode] = useState(false);
     const [isAssetName, setIsAssetName] = useState(false);
-    const [isCategory, setIsCategory] = useState(false);
+    const [isAssignedTo, setIsAssignedTo] = useState(false);
+    const [isAssignedBy, setIsAssignedBy] = useState(false);
+    const [isAssignedDate, setIsAssignedDate] = useState(false);
     const [isState, setIsState] = useState(false);
 
+    const handleIsNo = () => {
+        setIsNo((pre) => !pre);
+    };
     const handleIsAssetCode = () => {
         setIsAssetCode((pre) => !pre);
     };
     const handleIsAssetName = () => {
         setIsAssetName((pre) => !pre);
     };
-    const handleIsCategory = () => {
-        setIsCategory((pre) => !pre);
+    const handleIsAssignedTo = () => {
+        setIsAssignedTo((pre) => !pre);
+    };
+    const handleIsAssignedBy = () => {
+        setIsAssignedBy((pre) => !pre);
+    };
+    const handleIsAssignedDate = () => {
+        setIsAssignedDate((pre) => !pre);
     };
     const handleIsState = () => {
         setIsState((pre) => !pre);
@@ -101,7 +113,7 @@ function Assignment() {
     return (
         <div className={cx('container')}>
             <div className={cx('title_asset')}>
-                <h1>Asset List</h1>
+                <h1>Assignment List</h1>
             </div>
 
             <div className={cx('filterbox')}>
@@ -187,8 +199,8 @@ function Assignment() {
                                 <>
                                     <div className={cx('title')}>
                                         <div>No.</div>
-                                        <button className={cx('triagle')} onClick={handleIsAssetCode}>
-                                            {isAssetCode ? <GoTriangleUp /> : <GoTriangleDown />}
+                                        <button className={cx('triagle')} onClick={handleIsNo}>
+                                            {isNo ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -217,8 +229,8 @@ function Assignment() {
                                 <>
                                     <div className={cx('title')}>
                                         <div>Assigned to</div>
-                                        <button className={cx('triagle')} onClick={handleIsAssetCode}>
-                                            {isAssetCode ? <GoTriangleUp /> : <GoTriangleDown />}
+                                        <button className={cx('triagle')} onClick={handleIsAssignedTo}>
+                                            {isAssignedTo ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -227,8 +239,8 @@ function Assignment() {
                                 <>
                                     <div className={cx('title')}>
                                         <div> Assigned by</div>
-                                        <button className={cx('triagle')} onClick={handleIsCategory}>
-                                            {isCategory ? <GoTriangleUp /> : <GoTriangleDown />}
+                                        <button className={cx('triagle')} onClick={handleIsAssignedBy}>
+                                            {isAssignedBy ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -237,8 +249,8 @@ function Assignment() {
                                 <>
                                     <div className={cx('title')}>
                                         <div> Assigned Date</div>
-                                        <button className={cx('triagle')} onClick={handleIsState}>
-                                            {isState ? <GoTriangleUp /> : <GoTriangleDown />}
+                                        <button className={cx('triagle')} onClick={handleIsAssignedDate}>
+                                            {isAssignedDate ? <GoTriangleUp /> : <GoTriangleDown />}
                                         </button>
                                     </div>
                                 </>
@@ -257,7 +269,7 @@ function Assignment() {
                     </thead>
                     <tbody>
                         {data.map((item, index) => (
-                            <tr>
+                            <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{item.asset}</td>
                                 <td>{item.name}</td>
