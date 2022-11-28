@@ -12,8 +12,6 @@ import { FaFilter } from 'react-icons/fa';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
 
-import { data } from './data';
-
 const cx = classNames.bind(styles);
 
 function Assignment() {
@@ -268,7 +266,7 @@ function Assignment() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((item, index) => (
+                        {/* {.map((item, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{item.asset}</td>
@@ -291,7 +289,7 @@ function Assignment() {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </Table>
             </div>

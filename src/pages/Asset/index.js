@@ -1,19 +1,19 @@
-import styles from './asset.module.scss';
-import classNames from 'classnames/bind';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-import { BASE_URL } from '../../constants';
 import axios from 'axios';
+import classNames from 'classnames/bind';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../constants';
 import { useAuthContext } from '../../context/RequiredAuth/authContext';
+import styles from './asset.module.scss';
 
-import Modal from 'react-bootstrap/Modal';
-import { FaFilter } from 'react-icons/fa';
-import Table from 'react-bootstrap/Table';
-import { TiDeleteOutline } from 'react-icons/ti';
-import Pagination from 'react-bootstrap/Pagination';
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Pagination from 'react-bootstrap/Pagination';
+import Table from 'react-bootstrap/Table';
 import { BsFillPencilFill, BsSearch } from 'react-icons/bs';
+import { FaFilter } from 'react-icons/fa';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 const cx = classNames.bind(styles);
 
@@ -32,31 +32,41 @@ function Asset() {
     const [isState, setIsState] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [activeDeleteId, setactiveDeleteId] = useState();
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
 
-    const [isOne, setIsOne] = useState(true);
-    const [isTwo, setIsTwo] = useState(false);
-    const [isThree, setIsThree] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const [disablePrevious, setDisablePrevious] = useState(false);
-    const [disableNext, setDisableNext] = useState(false);
+    const [totalPage, setTotalPage] = useState();
 
     const [dataList, setDataList] = useState([]);
 
+    let location = useLocation();
     let navigate = useNavigate();
     const { token } = useAuthContext();
 
     const handleIsAssetCode = () => {
         setIsAssetCode((pre) => !pre);
+
+        if (dataList) {
+            dataList.reverse();
+        }
     };
     const handleIsAssetName = () => {
         setIsAssetName((pre) => !pre);
+        if (dataList) {
+            dataList.reverse();
+        }
     };
     const handleIsCategory = () => {
         setIsCategory((pre) => !pre);
+        if (dataList) {
+            dataList.reverse();
+        }
     };
     const handleIsState = () => {
         setIsState((pre) => !pre);
+        if (dataList) {
+            dataList.reverse();
+        }
     };
 
     useEffect(() => {
@@ -161,58 +171,6 @@ function Asset() {
         setShowCategory((pre) => !pre);
     };
 
-    const handlePageOne = () => {
-        setIsTwo(false);
-        setIsThree(false);
-        setIsOne(true);
-        setCurrentPage(1);
-        setDisableNext(false);
-    };
-    const handlePageTwo = () => {
-        setIsOne(false);
-        setIsTwo(true);
-        setIsThree(false);
-        setCurrentPage(2);
-        setDisableNext(false);
-    };
-
-    const handlePageThree = () => {
-        setIsThree(true);
-        setIsOne(false);
-        setIsTwo(false);
-        setCurrentPage(3);
-        setDisableNext(true);
-    };
-
-    const handlePrevious = () => {
-        if (currentPage === 2) {
-            setIsOne(true);
-            setIsTwo(false);
-            setDisableNext(false);
-        }
-        if (currentPage === 3) {
-            setIsOne(false);
-            setIsTwo(true);
-            setIsThree(false);
-            setDisableNext(false);
-        }
-        setCurrentPage(currentPage - 1);
-    };
-
-    const handleNext = () => {
-        if (currentPage === 1) {
-            setIsOne(false);
-            setIsTwo(true);
-        }
-        if (currentPage === 2) {
-            setIsOne(false);
-            setIsTwo(false);
-            setIsThree(true);
-            setDisableNext(true);
-        }
-        setCurrentPage(currentPage + 1);
-    };
-
     const showModalDelete = (id) => {
         setactiveDeleteId(id);
         setShowDelete(true);
@@ -232,6 +190,7 @@ function Asset() {
             .then((response) => {
                 if (response.status === 200) {
                     setShowDelete(false);
+                    setDeleteSuccess((pre) => !pre);
                 }
             })
             .catch((error) => {
@@ -240,15 +199,26 @@ function Asset() {
     };
 
     useEffect(() => {
-        if (currentPage === 1) {
-            setDisablePrevious(true);
+        if (!location.search) {
+            navigate('?p=1');
         }
-        if (currentPage !== 1) {
-            setDisablePrevious(false);
-        }
-    }, [currentPage]);
 
-    // call api get
+        return;
+    }, [location, navigate]);
+
+    const handlePage = (item) => {
+        setCurrentPage(item);
+        navigate(`?p=${item}`);
+    };
+
+    useEffect(() => {
+        const currentSearchPage = location.search?.slice(-1);
+        if (currentSearchPage && Number(currentSearchPage)) {
+            setCurrentPage(Number(currentSearchPage));
+        }
+    }, [currentPage, location.pathname, location.search]);
+
+    // api
     useEffect(() => {
         axios({
             method: 'GET',
@@ -262,13 +232,12 @@ function Asset() {
         })
             .then((response) => {
                 setDataList(response.data.source);
+                setTotalPage(response.data.totalPage);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [currentPage, token.token]);
-
-    // call api delete
+    }, [currentPage, token.token, deleteSuccess]);
 
     return (
         <div className={cx('container')}>
@@ -474,19 +443,22 @@ function Asset() {
 
             <div className={cx('paging')}>
                 <Pagination>
-                    <Pagination.Item disabled={disablePrevious} onClick={handlePrevious}>
+                    <Pagination.Item disabled={currentPage === 1} onClick={() => handlePage(currentPage - 1)}>
                         Previous
                     </Pagination.Item>
-                    <Pagination.Item active={isOne} onClick={handlePageOne}>
-                        1
-                    </Pagination.Item>
-                    <Pagination.Item active={isTwo} onClick={handlePageTwo}>
-                        2
-                    </Pagination.Item>
-                    <Pagination.Item active={isThree} onClick={handlePageThree}>
-                        3
-                    </Pagination.Item>
-                    <Pagination.Item disabled={disableNext} onClick={handleNext}>
+                    {[...Array(totalPage)].map((_, pageNumberIndex) => (
+                        <Pagination.Item
+                            key={pageNumberIndex}
+                            onClick={() => handlePage(pageNumberIndex + 1)}
+                            active={pageNumberIndex + 1 === currentPage}
+                        >
+                            {pageNumberIndex + 1}
+                        </Pagination.Item>
+                    ))}
+                    <Pagination.Item
+                        disabled={totalPage && totalPage === currentPage}
+                        onClick={() => handlePage(currentPage + 1)}
+                    >
                         Next
                     </Pagination.Item>
                 </Pagination>
