@@ -18,6 +18,7 @@ import { TiDeleteOutline } from 'react-icons/ti';
 const cx = classNames.bind(styles);
 
 function Asset() {
+    const { setId } = useAuthContext();
     const ref = useRef();
     const [checkedState, setCheckedState] = useState({ available: false, notAvailable: false, assigned: false });
     const [checkedCategory, setCheckedCategory] = useState({ laptop: false, monitor: false, personalComputer: false });
@@ -33,6 +34,7 @@ function Asset() {
     const [showDelete, setShowDelete] = useState(false);
     const [activeDeleteId, setactiveDeleteId] = useState();
     const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const [search, setSearch] = useState('');
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
@@ -90,7 +92,8 @@ function Asset() {
         navigate('createnewasset');
     };
 
-    const navigateToEditAsset = () => {
+    const navigateToEditAsset = (id) => {
+        setId(id);
         navigate('editasset');
     };
 
@@ -218,7 +221,6 @@ function Asset() {
         }
     }, [currentPage, location.pathname, location.search]);
 
-    // api
     useEffect(() => {
         axios({
             method: 'GET',
@@ -238,6 +240,33 @@ function Asset() {
                 console.log(error);
             });
     }, [currentPage, token.token, deleteSuccess]);
+
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(
+                `https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Asset/query?page=2&pageSize=2&valueSearch=${search}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${token.token}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                },
+            );
+
+            const data = Promise.resolve(response);
+
+            if (response.status === 200) {
+                console.log(data);
+            }
+        } catch (error) {
+            console.log('error');
+        }
+
+        return null;
+    };
 
     return (
         <div className={cx('container')}>
@@ -275,7 +304,14 @@ function Asset() {
                         <Form.Control />
 
                         <InputGroup.Text>
-                            <button className={cx('input')}>
+                            <button
+                                className={cx('input')}
+                                onClick={handleSearch}
+                                value={search}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                }}
+                            >
                                 <BsSearch />
                             </button>
                         </InputGroup.Text>
@@ -422,7 +458,11 @@ function Asset() {
 
                                       <td>
                                           <div className={cx('actions')}>
-                                              <button className={cx('pen')} disabled={false} onClick={navigateToEditAsset}>
+                                              <button
+                                                  className={cx('pen')}
+                                                  disabled={false}
+                                                  onClick={() => navigateToEditAsset(item.id)}
+                                              >
                                                   <BsFillPencilFill />
                                               </button>
                                               <button
