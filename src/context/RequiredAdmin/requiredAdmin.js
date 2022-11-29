@@ -1,7 +1,7 @@
-// import { useAuthContext } from '../../context/RequiredAuth/authContext';
+// import { useAppContext } from '../../context/RequiredAuth/authContext';
 
 // function RequiredAdmin({ children }) {
-//     const { user } = useAuthContext();
+//     const { user } = useAppContext();
 
 //     console.log(user?.isAdmin);
 //     if (!user?.isAdmin) {

@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import styles from './createAsset.module.scss';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../../../context/RequiredAuth/authContext';
+import { useAppContext } from '../../../context/RequiredAuth/authContext';
 import { getAllData } from '../../../apiServices';
 import { InputGroup } from 'react-bootstrap';
 
@@ -18,10 +18,8 @@ function CreateAsset() {
     const [category, setCategory] = useState('');
     const [specification, setSpecification] = useState('');
     const [installedDate, setInstalledDate] = useState('');
-    const [checkbox, setCheckbox] = useState();
+    const [checkbox, setCheckbox] = useState(1);
     const [disabled, setDisable] = useState(true);
-
-    const [dataCategory, setDataCategory] = useState([]);
     const [addCategory, setAddCategory] = useState(false);
     const [createCategory, setCreateCategory] = useState(false);
     const [errorCategoryName2, setErrorCategoryName2] = useState(false);
@@ -29,8 +27,9 @@ function CreateAsset() {
     const [errorCategoryId3, setErrorCategoryId3] = useState(false);
     const [errorCategoryName, setErrorCategoryName] = useState(false);
     const [disableCategory, setDisableCategory] = useState(true);
+    const [categories, setCategories] = useState([]);
 
-    const { token } = useAuthContext();
+    const { token } = useAppContext();
     const navigate = useNavigate();
 
     const [categoryName, setCategoryName] = useState('');
@@ -46,13 +45,15 @@ function CreateAsset() {
         }
     };
 
+    const { setNewAsset } = useAppContext();
+
     const handleCreate = async () => {
         try {
             const response = await fetch(`https://nashtech-rookies-hn06-gr06-api.azurewebsites.net/api/Asset`, {
                 method: 'POST',
                 body: JSON.stringify({
                     assetName: name,
-                    categoryId: category,
+                    categoryId: categoryName,
                     specification: specification,
                     installedDate: installedDate,
                     state: checkbox,
@@ -65,8 +66,11 @@ function CreateAsset() {
                 },
             });
 
+            const data = await response.json();
+
             if (response.status === 200) {
                 navigate('/manageasset');
+                setNewAsset(data);
             }
         } catch (error) {
             console.log('error');
@@ -76,22 +80,16 @@ function CreateAsset() {
     };
 
     useEffect(() => {
-        if (
-            Boolean(name) &&
-            Boolean(category) &&
-            Boolean(specification) &&
-            Boolean(installedDate) &&
-            checkbox !== undefined
-        ) {
-            setDisable(false);
-        } else {
+        if (Boolean(name) && Boolean(category) && Boolean(specification) && Boolean(installedDate)) {
             setDisable(true);
+        } else {
+            setDisable(false);
         }
-    }, [name, category, specification, installedDate, checkbox]);
+    }, [name, category, specification, installedDate]);
 
     const getData = async () => {
         const data = await getAllData('Category');
-        setDataCategory(data);
+        setCategories(data);
     };
 
     useEffect(() => {
@@ -131,8 +129,13 @@ function CreateAsset() {
                 },
             });
 
+            const data = await response.json();
+
             if (response.status === 200) {
                 setCreateCategory((pre) => !pre);
+                setCategories((prevCategories) => [...prevCategories, data]);
+                setCategoryName(data.id);
+                setCategory(data.name);
             }
 
             if (categoryName.length > 50) {
@@ -176,7 +179,7 @@ function CreateAsset() {
                 <Form.Group className={cx('common-form')}>
                     <Form.Label className={cx('title_input')}>Category</Form.Label>
                     <InputGroup>
-                        <Form.Control placeholder={''} />
+                        <Form.Control placeholder={'Category'} value={category} />
 
                         <InputGroup.Text
                             style={{ backgroundColor: 'transparent', fontSize: 20, cursor: 'pointer' }}
@@ -224,7 +227,7 @@ function CreateAsset() {
                 </Form.Group>
 
                 <div className={cx('button')}>
-                    <Button variant="danger" onClick={handleCreate} disabled={disabled}>
+                    <Button variant="danger" onClick={handleCreate} disabled={!disabled}>
                         Save
                     </Button>
 
@@ -236,14 +239,14 @@ function CreateAsset() {
 
             {addCategory && (
                 <div className={cx('container_category')}>
-                    {dataCategory?.map((item, index) => (
+                    {categories?.map((item, index) => (
                         <div
                             className={cx('item')}
                             key={index}
                             name={'categoryId'}
-                            value={item.id}
-                            onClick={(e) => {
-                                setCategory(e.target.value);
+                            onClick={() => {
+                                setCategoryName(item.id);
+                                setCategory(item.name);
                             }}
                         >
                             {item.name}
