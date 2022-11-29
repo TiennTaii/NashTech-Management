@@ -79,7 +79,7 @@ function CreateAsset() {
         <div className={cx('container')}>
             <h3 className={cx('title')}>Edit Asset</h3>
 
-            <Form>
+            <Form className={cx('form')}>
                 <Form.Group className={cx('common-form')}>
                     <Form.Label className={cx('title_input')}> Name</Form.Label>
                     <Form.Control
